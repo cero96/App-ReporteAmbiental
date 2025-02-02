@@ -4,7 +4,8 @@ git branch develop
 git flow init 
 git push -u origin develop
 git checkout -b feature/1GitFlow
-
+git checkout develop
+git merge feature_branch
 
 
 # React + Vite
