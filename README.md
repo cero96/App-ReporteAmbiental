@@ -1,3 +1,12 @@
+setear proyecto con git flow 
+
+git branch develop
+git flow init 
+git push -u origin develop
+git checkout -b feature/1GitFlow
+
+
+
 # React + Vite
 Comando Utilizados 
 
