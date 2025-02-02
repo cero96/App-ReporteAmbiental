@@ -1,0 +1,11 @@
+# Ignorar archivos compilados
+*.o
+*.a
+*.out
+
+# Ignorar directorios
+node_modules/
+dist/
+
+# Ignorar archivos específicos
+*.log
