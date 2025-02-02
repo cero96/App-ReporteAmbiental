@@ -1,0 +1,77 @@
+/* styles.css */
+
+/* Paleta de colores amigables */
+:root {
+  --primary-color: #4CAF50; /* Verde claro */
+  --secondary-color: #2196F3; /* Azul claro */
+  --background-color: #F1F8E9; /* Fondo claro */
+  --text-color: #212121; /* Texto oscuro */
+  --button-hover-color: #388E3C; /* Verde más oscuro para hover */
+  --border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Estilo global del body */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-container {
+  background-color: var(--background-color);
+  padding: 30px;
+  border-radius: var(--border-radius);
+}
+
+h1.title {
+  color: var(--primary-color);
+  font-weight: 700;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+h1.title:hover {
+  transform: scale(1.05);
+}
+
+button.btn {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--border-radius);
+  padding: 12px 25px;
+  border: none;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+  background-color: var(--button-hover-color);
+  cursor: pointer;
+}
+
+button.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}
+
+p.lead {
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 767px) {
+  .home-container {
+    padding: 20px;
+  }
+
+  h1.title {
+    font-size: 2.5rem;
+  }
+
+  p.lead {
+    font-size: 1rem;
+  }
+}
