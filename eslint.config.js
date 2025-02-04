@@ -36,3 +36,25 @@ export default [
     },
   },
 ]
+// eslint.config.js
+
+module.exports = {
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+  ],
+  rules: {
+    'react/react-in-jsx-scope': 'off', // Ya no es necesario con React 17+.
+    'no-unused-vars': 'warn',
+  },
+};
