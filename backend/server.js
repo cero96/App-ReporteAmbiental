@@ -1,5 +1,3 @@
-// /backend/server.js
-
 import express from 'express';
 import pkg from 'pg';  
 const { Client } = pkg;
@@ -52,7 +50,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 // Ruta para iniciar sesión
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {  // Asegúrate que esta ruta sea /login
   const { email, password } = req.body;
 
   const query = 'SELECT * FROM users WHERE email = $1';
