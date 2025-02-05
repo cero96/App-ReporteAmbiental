@@ -1,4 +1,4 @@
-// backend/server.js
+// /backend/server.js
 
 import express from 'express';
 import pkg from 'pg';  
@@ -32,17 +32,19 @@ client.connect()
   .then(() => console.log('Conectado a PostgreSQL'))
   .catch(err => console.error('Error al conectar a PostgreSQL', err));
 
-// Ruta para registrar usuarios
-app.post('/register', async (req, res) => {
+// Ruta para registrar usuarios (corrigiendo la ruta a /api/auth/register)
+app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   
+  // Hashear la contraseña
   const hashedPassword = await bcrypt.hash(password, 10);
   const query = 'INSERT INTO users (name, email, password, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *';
   const values = [name, email, hashedPassword];
 
   try {
+    // Ejecutar la consulta de inserción
     const result = await client.query(query, values);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result.rows[0]); // Responder con el usuario registrado
   } catch (err) {
     console.error('Error al registrar el usuario:', err);
     res.status(500).json({ error: 'Error al registrar el usuario' });
