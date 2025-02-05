@@ -9,7 +9,8 @@ import Home from './components/Home';
 import Contacto from './components/Contacto';
 import Login from './components/Login';
 import Register from './components/Register';
-import GoogleLogin from './components/GoogleLogin'
+import GoogleLogin from './components/GoogleLogin';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/GoogleLogin" element={<GoogleLogin />} /> 
+          <Route path="/Footer" element={<footer />} /> 
         </Routes>
       </div>
     </Router>
