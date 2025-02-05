@@ -1,10 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';  // Aquí es donde importas tu componente principal
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
 
-// Aquí se monta la aplicación en el DOM dentro del contenedor con id 'root'
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
     <App />
-  </React.StrictMode>
-);
+  </StrictMode>,
+)
