@@ -1,29 +1,32 @@
 // frontend/src/components/Formulario.jsx
-import { useState } from 'react';
-import axios from 'axios';
-import { Button, Card, Form } from 'react-bootstrap';
 
-export function Formulario({ setUser }) {
+import { useState } from 'react';
+import { Button, Card, Form } from 'react-bootstrap';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+export function Formulario({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();  // Usamos el hook useNavigate para redirigir
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/login', {
+      const response = await axios.post(import.meta.env.VITE_URL + '/login', {
         email,
         password
       });
 
       const { token, user } = response.data;
 
-      // Almacenar el token y el usuario en el estado
+      // Almacenamos el token y el usuario en el estado
       localStorage.setItem('token', token);
-      setUser(user.name);
+      onLogin(user);  // Llamamos a la función onLogin pasando el usuario completo
 
-      // Redirigir a la página de inicio (Home)
-      window.location.href = '/home';
+      // Redirigimos al home después de un login exitoso
+      navigate('/home');
     } catch (error) {
       console.error('Error al iniciar sesión', error);
     }
