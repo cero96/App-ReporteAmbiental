@@ -7,6 +7,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Im
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Contacto from './components/Contacto';
+import Login from './components/Login';
+import Register from './components/Register';
+import GoogleLogin from './components/GoogleLogin';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -17,7 +21,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/login" element={<Login />} /> 
+          <Route path="/register" element={<Register />} /> 
+          <Route path="/GoogleLogin" element={<GoogleLogin />} /> 
+          <Route path="/footer" element={<Footer />} /> 
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

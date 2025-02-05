@@ -1,19 +1,10 @@
-// backend/server.js
+import express from 'express';
+import mongoose from 'mongoose';  // Importar mongoose
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-import express from "express";
-/*import pkg from 'pg'; 
-const { Client } = pkg;*/
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import dotenv, { config } from "dotenv";
-import cors from "cors";
-import { db } from "./src/config/db.js";
-import colors from "colors";
-import User from "./src/models/users.js"; // Importa el modelo User
-import UserComparisons from "./src/models/usersComparisons.js"; // Importa el modelo User
-import usersRouter from "./src/routes/usersRouter.js";
-import UserComparisonsRouter from "./src/routes/userComparisonsRouter.js";
-import ComparisonRouter from "./src/routes/comparisonsRouter.js";
+// Cargar variables de entorno
+dotenv.config();
 
 const app = express();
 
@@ -23,74 +14,34 @@ app.use(cors());
 // Middleware para parsear el cuerpo de las peticiones a JSON
 app.use(express.json());
 
-// Configuración PostgreSQL
-async function connectDatabase() {
-  try {
-    await db.authenticate();
-    db.sync(); // Asegúrate de esperar la sincronización
-    console.log(colors.blue.bold("Conexión existosa a postgress"));
-  } catch (error) {
-    console.log(
-      colors.red.bold("Conexión Fallo a la base de datos", { error })
-    );
-  }
-}
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch((err) => console.error('Error al conectar a MongoDB', err));
 
-connectDatabase();
-
-app.use("/api/users", usersRouter);
-// Ruta para registrar usuarios
-app.use("/api/userscomparisons", UserComparisonsRouter);
-app.use("/api/comparisons", ComparisonRouter);
-
-app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const query =
-    "INSERT INTO users (name, email, password, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
-  const values = [name, email, hashedPassword];
-
-  try {
-    const result = await client.query(query, values);
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error("Error al registrar el usuario:", err);
-    res.status(500).json({ error: "Error al registrar el usuario" });
-  }
+// Esquema y modelo para los comentarios
+const commentSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  message: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-// Ruta para iniciar sesión
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+const Comment = mongoose.model('Comment', commentSchema);
 
-  const query = "SELECT * FROM users WHERE email = $1";
+// Ruta para guardar comentarios
+app.post('/api/comments', async (req, res) => {
+  const { name, email, message } = req.body;
   try {
-    const result = await client.query(query, [email]);
-
-    if (result.rows.length === 0) {
-      return res.status(400).json({ error: "Usuario no encontrado" });
-    }
-
-    const user = result.rows[0];
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ error: "Contraseña incorrecta" });
-    }
-
-    // Crear token JWT
-    const token = jwt.sign(
-      { id: user.id, name: user.name },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    // Enviar el token y el usuario
-    res.json({ token, user: { name: user.name, email: user.email } });
+    const newComment = new Comment({ name, email, message });
+    await newComment.save();
+    res.status(201).json({ message: 'Comentario guardado con éxito', comment: newComment });
   } catch (err) {
-    console.error("Error al iniciar sesión:", err);
-    res.status(500).json({ error: "Error al iniciar sesión" });
+    console.error('Error al guardar el comentario:', err);
+    res.status(500).json({ error: 'Error al guardar el comentario' });
   }
 });
 
