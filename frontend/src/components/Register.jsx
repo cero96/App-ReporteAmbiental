@@ -32,7 +32,7 @@ const Register = () => {
     }
 
     // Crear el objeto con los datos del formulario
-    const data = { username, email, password };
+    const data = { name: username, email, password };
 
     try {
       // Enviar la solicitud POST al servidor
