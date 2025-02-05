@@ -24,8 +24,9 @@ function App() {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/GoogleLogin" element={<GoogleLogin />} /> 
-          <Route path="/Footer" element={<footer />} /> 
+          <Route path="/footer" element={<Footer />} /> 
         </Routes>
+        <Footer />
       </div>
     </Router>
   );
