@@ -1,4 +1,3 @@
-// /src/components/Login.jsx
 import React, { useState } from 'react';
 import GoogleLogin from './GoogleLogin'; // Importar el componente GoogleLogin
 
@@ -23,7 +22,7 @@ const Login = () => {
 
     try {
       // Hacer la solicitud POST al backend
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:5000/login', {  // Cambié la ruta aquí
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,11 +30,19 @@ const Login = () => {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const textResponse = await response.text(); // Leer la respuesta como texto
+      console.log(textResponse); // Ver la respuesta cruda
+
+      let result;
+      try {
+        result = JSON.parse(textResponse); // Intentar convertir la respuesta a JSON
+      } catch (error) {
+        throw new Error('La respuesta no es un JSON válido');
+      }
 
       // Si el login es exitoso
       if (response.ok) {
-        setErrorMessage(''); // Limpiar mensaje de error
+        setErrorMessage(''); // Limpiar el mensaje de error
         localStorage.setItem('token', result.token); // Guardar el token en localStorage
         alert('Login exitoso!'); // Notificar al usuario
 
@@ -81,8 +88,8 @@ const Login = () => {
           <button type="submit" className="btn btn-success w-100">Iniciar sesión</button>
           <GoogleLogin /> 
           {errorMessage && (
-          <p id="error-message" className="text-danger mt-3">{errorMessage}</p>
-        )}
+            <p id="error-message" className="text-danger mt-3">{errorMessage}</p>
+          )}
         </form>      
       </div>
     </div>
