@@ -12,6 +12,7 @@ const Contacto = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <p className="text-center">
+              Para mayor información contactanos con nosotros, estaremos gustosos en atenderte.
             </p>
 
             <form>
