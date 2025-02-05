@@ -9,7 +9,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAVX3SQfmnCu7Vs_dg0BX9nun73qamUHPw",
   authDomain: "login-eckocheck.firebaseapp.com",
   projectId: "login-eckocheck",
-  storageBucket: "login-eckocheck.firebasestorage.app",
+  storageBucket: "login-eckocheck.firebasestorage.com",
   messagingSenderId: "413400680905",
   appId: "1:413400680905:web:115df59786e59d8039c018"
 };
