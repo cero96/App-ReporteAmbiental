@@ -9,8 +9,8 @@ import dotenv, { config } from "dotenv";
 import cors from "cors";
 import { db } from "./src/config/db.js";
 import colors from "colors";
-import User from "./src/models/users.js"; // Importa el modelo User
-import UserComparisons from "./src/models/usersComparisons.js"; // Importa el modelo User
+import User from "./src/models/users.js";
+import UserComparisons from "./src/models/usersComparisons.js";
 import usersRouter from "./src/routes/usersRouter.js";
 import UserComparisonsRouter from "./src/routes/userComparisonsRouter.js";
 import ComparisonRouter from "./src/routes/comparisonsRouter.js";
