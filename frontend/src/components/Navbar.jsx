@@ -32,6 +32,9 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/contacto">Comentarios</Link> {/* Usamos Link en lugar de <a> */}
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/blog">Blog</Link> {/* Usamos Link en lugar de <a> */}
+            </li>
 
           </ul>
         </div>
