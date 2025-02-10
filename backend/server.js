@@ -2,6 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';  // Importar mongoose
 import cors from 'cors';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { db } from './src/config/db.js';  // Asegúrate de que esta ruta sea correcta
+import colors from 'colors';
+import User from './src/models/users.js';
+import UserComparisons from './src/models/usersComparisons.js';
+import usersRouter from './src/routes/usersRouter.js';
+import UserComparisonsRouter from './src/routes/userComparisonsRouter.js';
+import ComparisonRouter from './src/routes/comparisonsRouter.js';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -44,6 +53,11 @@ app.post('/api/comments', async (req, res) => {
     res.status(500).json({ error: 'Error al guardar el comentario' });
   }
 });
+
+// Rutas adicionales para manejar usuarios y comparaciones
+app.use('/api/users', usersRouter);
+app.use('/api/usercomparisons', UserComparisonsRouter);
+app.use('/api/comparisons', ComparisonRouter);
 
 // Puerto y servidor
 const PORT = process.env.PORT || 5000;
