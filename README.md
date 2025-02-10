@@ -27,3 +27,6 @@ npm install bootstrap
 
 npm install react-router-dom
 npm install react-chartjs-2 chart.js
+
+
+URLS para ser consumidas desde el Frontend 
