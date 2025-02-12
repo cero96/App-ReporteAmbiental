@@ -1,4 +1,3 @@
-// /src/components/Navbar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom'; // Importamos Link desde react-router-dom
 
@@ -21,21 +20,17 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Inicio</Link> {/* Usamos Link en lugar de <a> */}
+              <Link className="nav-link" to="/">Inicio</Link> 
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link> {/* Usamos Link en lugar de <a> */}
+              <Link className="nav-link" to="/home">Home</Link> 
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/register">Registro</Link> {/* Usamos Link en lugar de <a> */}
+              <Link className="nav-link" to="/contacto">Comentarios</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/contacto">Comentarios</Link> {/* Usamos Link en lugar de <a> */}
+              <Link className="nav-link" to="/blog">Blog</Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/blog">Blog</Link> {/* Usamos Link en lugar de <a> */}
-            </li>
-
           </ul>
         </div>
       </div>
