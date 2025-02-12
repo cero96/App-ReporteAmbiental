@@ -23,10 +23,20 @@ UserComparisons.init(
     comparison_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "comparisons",
+        key: "id_comparison",
+      },
+      onDelete: "Cascade",
     },
     appliance_ids: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "appliances",
+        key: "appliance_id",
+      },
+      onDelete: "Cascade",
     },
   },
   {

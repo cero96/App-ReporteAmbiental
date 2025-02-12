@@ -10,13 +10,13 @@ export class ComparisonsControllers {
     const transaction = await db.transaction();
 
     try {
-      const lastUser = await Comparisons.findOne({
+      const lastComparisons = await Comparisons.findOne({
         order: [["id_comparison", "DESC"]],
       });
 
-      const newUserId = lastUser ? lastUser.id + 1 : 1;
+      const newComparissonId = lastComparisons ? lastComparisons.id + 1 : 1;
       const comparisons = await Comparisons.create(
-        { ...req.body, id: newUserId },
+        { ...req.body, id: newComparissonId },
         { transaction }
       );
 
@@ -28,9 +28,10 @@ export class ComparisonsControllers {
         description: comparisons.description,
       };
 
-      res
-        .status(201)
-        .json({ message: "Usuario creado correctamente", user: responseData });
+      res.status(201).json({
+        message: "Comparisson creado correctamente",
+        user: responseData,
+      });
     } catch (error) {
       await transaction.rollback();
 
