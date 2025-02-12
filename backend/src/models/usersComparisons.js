@@ -41,7 +41,7 @@ UserComparisons.init(
   },
   {
     sequelize: db,
-    modelName: "UsersComparisons",
+    modelName: "UserComparisons",
     tableName: "users_comparisons",
   }
 );
