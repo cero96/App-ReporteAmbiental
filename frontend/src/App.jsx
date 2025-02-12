@@ -13,6 +13,7 @@ import Blog from './components/Blog';
 import GoogleLogin from './components/GoogleLogin';
 
 import Footer from './components/footer';
+import Auth from './components/Auth';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/googleLogin" element={<GoogleLogin />} /> 
           <Route path="/blog" element={<Blog />} /> 
           <Route path="/footer" element={<Footer />} /> 
+          <Route path="/auth" element={<Auth />} /> 
         </Routes>
         <Footer />
       </div>
