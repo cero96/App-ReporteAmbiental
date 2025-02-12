@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { handleInputErrors } from "../mddleware/validations.js";
+import { handleInputErrors } from "../middleware/validations.js";
 import { ComparisonsControllers } from "../controllers/ComparisonsController.js";
 
 const router = Router();
