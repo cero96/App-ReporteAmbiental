@@ -10,10 +10,12 @@ import Contacto from './components/Contacto';
 import Blog from './components/Blog';
 import Auth from './components/Auth';
 import Footer from './components/footer';
+import Auth from './components/Auth';
 
 function App() {
   return (
     <Router>
+
       <Navbar /> {/* Componente de navegación */}
       <Routes>
         <Route path="/" element={<Auth />} /> {/* Ruta principal para el login y registro */}
@@ -22,6 +24,7 @@ function App() {
         <Route path="/blog" element={<Blog />} /> {/* Ruta del blog */}
       </Routes>
       <Footer /> {/* Componente de pie de página */}
+
     </Router>
   );
 }
