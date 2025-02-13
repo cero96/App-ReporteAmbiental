@@ -14,9 +14,11 @@ export class ComparisonsControllers {
         order: [["id_comparison", "DESC"]],
       });
 
-      const newComparissonId = lastComparisons ? lastComparisons.id + 1 : 1;
+      const newComparissonId = lastComparisons
+        ? lastComparisons.id_comparison + 1
+        : 1;
       const comparisons = await Comparisons.create(
-        { ...req.body, id: newComparissonId },
+        { ...req.body, id_comparison: newComparissonId },
         { transaction }
       );
 

@@ -1,7 +1,7 @@
 import UserComparisons from "../models/usersComparisons.js";
 import { db } from "../config/db.js";
 
-export class UsersComparionsControllers {
+export class UsersComparisonsController {
   static getAll = async (req, res) => {
     console.log("Desde /api/userscomparisons");
   };
@@ -14,9 +14,9 @@ export class UsersComparionsControllers {
         order: [["user_comparisons_id", "DESC"]],
       });
 
-      const newId = lastId ? lastId.id + 1 : 1;
+      const newId = lastId ? lastId.user_comparisons_id + 1 : 1;
       const user_comparisons = await UserComparisons.create(
-        { ...req.body, id: newId },
+        { ...req.body, user_comparisons_id: newId },
         { transaction }
       );
 
@@ -26,7 +26,7 @@ export class UsersComparionsControllers {
         user_comparisons_id: user_comparisons.user_comparisons_id,
         user_id: user_comparisons.user_id,
         comparison_id: user_comparisons.comparison_id,
-        appliance_ids: user.appliance_ids,
+        appliance_ids: user_comparisons.appliance_ids,
       };
 
       res.status(201).json({
@@ -34,8 +34,9 @@ export class UsersComparionsControllers {
         user: responseData,
       });
     } catch (error) {
-      await transaction.rollback();
-
+      if (transaction.finished !== "commit") {
+        await transaction.rollback();
+      }
       console.log(error);
       res.status(500).json({ error: error.message });
     }

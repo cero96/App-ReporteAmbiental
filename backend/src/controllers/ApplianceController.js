@@ -14,9 +14,9 @@ export class AppliancesController {
         order: [["appliance_id", "DESC"]],
       });
 
-      const newId = lastid ? lastid.id + 1 : 1;
+      const newId = lastid ? lastid.appliance_id + 1 : 1;
       const appliance = await Appliances.create(
-        { ...req.body, id: newId },
+        { ...req.body, appliance_id: newId },
         { transaction }
       );
 

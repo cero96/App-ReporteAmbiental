@@ -14,9 +14,9 @@ export class ConsumptionHistoryController {
         order: [["id_consumption", "DESC"]],
       });
 
-      const newId = lastid ? lastid.id + 1 : 1;
+      const newId = lastid ? lastid.id_consumption + 1 : 1;
       const consumptionHistory = await ConsumptionHistory.create(
-        { ...req.body, id: newId },
+        { ...req.body, id_consumption: newId },
         { transaction }
       );
 

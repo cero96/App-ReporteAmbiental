@@ -14,9 +14,9 @@ export class ApplianceFeatureController {
         order: [["id_appliance_feature", "DESC"]],
       });
 
-      const newId = lastid ? lastid.id + 1 : 1;
+      const newId = lastid ? lastid.id_appliance_feature + 1 : 1;
       const applianceFeatures = await ApplianceFeature.create(
-        { ...req.body, id: newId },
+        { ...req.body, id_appliance_feature: newId },
         { transaction }
       );
 
@@ -25,8 +25,8 @@ export class ApplianceFeatureController {
       const responseData = {
         id: applianceFeatures.id_appliance_feature,
         appliance_id: applianceFeatures.appliance_id,
-        name: applianceFeatures.feature_name,
-        brand: applianceFeatures.feature_value,
+        feature_name: applianceFeatures.feature_name,
+        feature_value: applianceFeatures.feature_value,
       };
 
       res.status(201).json({
