@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
-import { UsersComparionsControllers } from "../controllers/UsersComparisonsController.js";
+import { UsersComparisonsController } from "../controllers/UsersComparisonsController.js";
 
 const router = Router();
 
-router.get("/", UsersComparionsControllers.getAll);
+router.get("/", UsersComparisonsController.getAll);
 
 router.post(
   "/",
@@ -49,11 +49,11 @@ router.post(
       }
       return true;
     }) */ handleInputErrors,
-  UsersComparionsControllers.create
+  UsersComparisonsController.create
 );
 
-router.get("/:id", UsersComparionsControllers.getById);
-router.put("/:id", UsersComparionsControllers.updateById);
-router.delete("/:id", UsersComparionsControllers.deleteById);
+router.get("/:id", UsersComparisonsController.getById);
+router.put("/:id", UsersComparisonsController.updateById);
+router.delete("/:id", UsersComparisonsController.deleteById);
 
 export default router;

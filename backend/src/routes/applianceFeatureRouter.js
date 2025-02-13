@@ -15,9 +15,7 @@ router.post(
   body("feature_name")
     .notEmpty()
     .withMessage("El campo feature_name no puede ir vacío"),
-  body("feature_value")
-    .notEmpty()
-    .withMessage("El campo feature_value no puede ir vacío"),
+  body("  ").notEmpty().withMessage("El campo feature_value no puede ir vacío"),
   handleInputErrors,
   ApplianceFeatureController.create
 );

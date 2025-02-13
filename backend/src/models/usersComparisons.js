@@ -9,7 +9,6 @@ UserComparisons.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
-      autoIncrement: true,
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -24,7 +23,7 @@ UserComparisons.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "comparisons",
+        model: "Comparisons",
         key: "id_comparison",
       },
       onDelete: "Cascade",

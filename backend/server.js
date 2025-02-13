@@ -91,7 +91,7 @@ app.use("/api/usercomparisons", UserComparisonsRouter);
 app.use("/api/comparisons", ComparisonRouter);
 app.use("/api/appliance", applianceRouter);
 app.use("/api/appliancefeature", applianceFeatureRouter);
-app.use("/api/appliancefeature", ConsumptionHistoryRouter);
+app.use("/api/consumptionhistory", ConsumptionHistoryRouter);
 
 // Puerto y servidor
 const PORT = process.env.PORT || 5001;

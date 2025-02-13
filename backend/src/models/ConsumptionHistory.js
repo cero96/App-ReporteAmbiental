@@ -9,7 +9,6 @@ ConsumptionHistory.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
-      autoIncrement: true,
     },
     appliance_id: {
       type: DataTypes.INTEGER,
