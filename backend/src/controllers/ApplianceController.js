@@ -6,7 +6,6 @@ export class AppliancesController {
     try {
       const appliance = await Appliances.findAll({
         order: [["appliance_id", "ASC"]],
-        //TODO: Filtrar por el usuario autenticado
       });
 
       res.json(appliance);
@@ -20,15 +19,12 @@ export class AppliancesController {
     const transaction = await db.transaction();
 
     try {
-      const lastid = await Appliances.findOne({
-        order: [["appliance_id", "DESC"]],
-      });
+      const applianceData = {
+        ...req.body,
+        image: req.file ? req.file.path : null, // Guarda la ruta de la imagen
+      };
 
-      const newId = lastid ? lastid.appliance_id + 1 : 1;
-      const appliance = await Appliances.create(
-        { ...req.body, appliance_id: newId },
-        { transaction }
-      );
+      const appliance = await Appliances.create(applianceData, { transaction });
 
       await transaction.commit();
 
@@ -39,15 +35,15 @@ export class AppliancesController {
         model: appliance.model,
         type: appliance.type,
         energy_rating: appliance.energy_rating,
+        image: appliance.image,
       };
 
       res.status(201).json({
         message: "Appliance creado correctamente",
-        user: responseData,
+        appliance: responseData,
       });
     } catch (error) {
       await transaction.rollback();
-
       console.log(error);
       res.status(500).json({ error: error.message });
     }
@@ -61,7 +57,7 @@ export class AppliancesController {
       if (!appliance) {
         return res
           .status(404)
-          .json({ error: "Electrodomestico no encontrada" });
+          .json({ error: "Electrodoméstico no encontrado" });
       }
       res.json(appliance);
     } catch (error) {
@@ -71,36 +67,55 @@ export class AppliancesController {
   };
 
   static updateById = async (req, res) => {
+    const transaction = await db.transaction();
+
     try {
       const { id } = req.params;
-      const appliance = await Appliances.findByPk(id);
+      const appliance = await Appliances.findByPk(id, { transaction });
 
       if (!appliance) {
+        await transaction.rollback();
         return res
           .status(404)
-          .json({ error: "Electrodomestico no encontrada" });
+          .json({ error: "Electrodoméstico no encontrado" });
       }
-      await appliance.update(req.body);
-      res.json("Electrodomestico actualizado correctamente");
+
+      const updateData = {
+        ...req.body,
+        image: req.file ? req.file.path : appliance.image, // Actualiza la imagen si se proporciona una nueva
+      };
+
+      await appliance.update(updateData, { transaction });
+      await transaction.commit();
+
+      res.json("Electrodoméstico actualizado correctamente");
     } catch (error) {
+      await transaction.rollback();
       console.log(error);
       res.status(500).json({ error: error.message });
     }
   };
 
   static deleteById = async (req, res) => {
+    const transaction = await db.transaction();
+
     try {
       const { id } = req.params;
-      const appliance = await Appliances.findByPk(id);
+      const appliance = await Appliances.findByPk(id, { transaction });
 
       if (!appliance) {
+        await transaction.rollback();
         return res
           .status(404)
-          .json({ error: "Electrodomestico no encontrada" });
+          .json({ error: "Electrodoméstico no encontrado" });
       }
-      await appliance.destroy();
-      res.json("Electrodomestico eliminado correctamente");
+
+      await appliance.destroy({ transaction });
+      await transaction.commit();
+
+      res.json("Electrodoméstico eliminado correctamente");
     } catch (error) {
+      await transaction.rollback();
       console.log(error);
       res.status(500).json({ error: error.message });
     }

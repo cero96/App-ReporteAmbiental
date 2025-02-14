@@ -8,7 +8,7 @@ Appliances.init(
     appliance_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,      
+      autoIncrement: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -29,6 +29,10 @@ Appliances.init(
     energy_rating: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING, // Ruta de la imagen
+      allowNull: true,
     },
   },
   {
