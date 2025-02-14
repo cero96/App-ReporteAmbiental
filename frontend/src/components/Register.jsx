@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import GoogleLogin from "./GoogleLogin";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -78,93 +79,74 @@ const Register = () => {
   }, [username, email, password, confirmPassword]);
 
   return (
-    <div className="tab-content">
-      <div className="tab-pane fade show active">
-        <form onSubmit={handleSubmit}>
-          <div className="text-center mb-3">
-            <p>Sign up with:</p>
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-facebook-f"></i>
-            </button>
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-google"></i>
-            </button>
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-twitter"></i>
-            </button>
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-github"></i>
-            </button>
-          </div>
+    <div className="register-container">
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="text-center mb-3">
+          <p>Sign up with:</p>
+          <GoogleLogin />
+        </div>
 
-          <p className="text-center">or:</p>
+        <p className="text-center">or:</p>
 
-          <div className="mb-4">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Nombre de usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Nombre de usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="mb-4">
-            <input
-              type="email"
-              className="form-control"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="mb-4">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="mb-4">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Confirmar contraseña"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
+        <div className="mb-4">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Confirmar contraseña"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
 
-          {errorMessage && (
-            <div className="alert alert-danger">{errorMessage}</div>
-          )}
-          {successMessage && (
-            <div className="alert alert-success">{successMessage}</div>
-          )}
+        {errorMessage && (
+          <div className="alert alert-danger">{errorMessage}</div>
+        )}
+        {successMessage && (
+          <div className="alert alert-success">{successMessage}</div>
+        )}
 
-          <button
-            type="submit"
-            className="btn btn-primary btn-block mb-4"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Registrando..." : "Registrarse"}
-          </button>
-
-          <div className="text-center">
-            <p>
-              ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
-            </p>
-          </div>
-        </form>
-      </div>
+        <button
+          type="submit"
+          className="btn btn-primary btn-block mb-4"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Registrando..." : "Registrarse"}
+        </button>
+      </form>
     </div>
   );
 };

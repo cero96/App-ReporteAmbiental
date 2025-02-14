@@ -1,11 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link desde react-router-dom
+import React from "react";
+import { Link } from "react-router-dom"; // Importamos Link desde react-router-dom
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light" id="navbar">
       <div className="container">
-        <a className="navbar-brand" href="#">EcoCheck</a>
+        <div className="container d-flex justify-content-between align-items-center">
+          {/* Logo y nombre de la aplicación */}
+          <Link to="/" className="text-decoration-none">
+            <h1 className="text-4xl fw-bold text-primary">
+              Eco<span className="text-secondary">Check</span>
+            </h1>
+          </Link>
+        </div>{" "}
         <button
           className="navbar-toggler"
           type="button"
@@ -20,19 +27,29 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Inicio</Link> 
+              <Link className="nav-link" to="/">
+                Inicio
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/home">Home</Link> 
+              <Link className="nav-link" to="/home">
+                Home
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/contacto">Comentarios</Link>
+              <Link className="nav-link" to="/contacto">
+                Comentarios
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/form">Register</Link>
-            </li>            
+              <Link className="nav-link" to="/form">
+                Register
+              </Link>
+            </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/dashboard">Dashboard</Link>
+              <Link className="nav-link" to="/dashboard">
+                Dashboard
+              </Link>
             </li>
           </ul>
         </div>
