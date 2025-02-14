@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
 import { AppliancesController } from "../controllers/ApplianceController.js";
 
@@ -21,7 +21,17 @@ router.post(
   AppliancesController.create
 );
 
-router.get("/:id", AppliancesController.getById);
+router.get(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  AppliancesController.getById
+);
+
 router.put("/:id", AppliancesController.updateById);
 router.delete("/:id", AppliancesController.deleteById);
 

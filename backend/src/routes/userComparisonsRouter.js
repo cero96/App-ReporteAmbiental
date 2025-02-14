@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
 import { UsersComparisonsController } from "../controllers/UsersComparisonsController.js";
 
@@ -52,7 +52,17 @@ router.post(
   UsersComparisonsController.create
 );
 
-router.get("/:id", UsersComparisonsController.getById);
+router.get(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  UsersComparisonsController.getById
+);
+
 router.put("/:id", UsersComparisonsController.updateById);
 router.delete("/:id", UsersComparisonsController.deleteById);
 

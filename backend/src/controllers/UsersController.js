@@ -51,7 +51,18 @@ export class UsersControllers {
   };
 
   static getById = async (req, res) => {
-    console.log("Desde Post /api/users");
+    try {
+      const { id } = req.params;
+      const user = await User.findByPk(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static updateById = async (req, res) => {

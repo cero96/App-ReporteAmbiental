@@ -54,7 +54,20 @@ export class AppliancesController {
   };
 
   static getById = async (req, res) => {
-    console.log("Desde Post /api/appliance");
+    try {
+      const { id } = req.params;
+      const appliance = await Appliances.findByPk(id);
+
+      if (!appliance) {
+        return res
+          .status(404)
+          .json({ error: "Electrodomestico no encontrada" });
+      }
+      res.json(appliance);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static updateById = async (req, res) => {

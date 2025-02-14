@@ -53,7 +53,18 @@ export class ComparisonsControllers {
   };
 
   static getById = async (req, res) => {
-    console.log("Desde Post /api/comparisons");
+    try {
+      const { id } = req.params;
+      const comparisons = await Comparisons.findByPk(id);
+
+      if (!comparisons) {
+        return res.status(404).json({ error: "Comparacion no encontrada" });
+      }
+      res.json(comparisons);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static updateById = async (req, res) => {
