@@ -1,0 +1,37 @@
+import axios from "axios";
+
+const API_URL = "http://localhost:3000/api/appliance";
+
+const ApplianceService = {
+  getAllAppliances: async () => {
+    try {
+      const response = await axios.get(API_URL);
+      return response;
+    } catch (error) {
+      console.error("Error al obtener los electrodomésticos:", error);
+      throw error;
+    }
+  },
+
+  createAppliance: async (applianceData) => {
+    try {
+      const response = await axios.post(API_URL, applianceData);
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear el electrodoméstico:", error);
+      throw error;
+    }
+  },
+
+  deleteAppliance: async (id) => {
+    try {
+      const response = await axios.delete(`${API_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al eliminar el electrodoméstico:", error);
+      throw error;
+    }
+  }
+};
+
+export default ApplianceService;
