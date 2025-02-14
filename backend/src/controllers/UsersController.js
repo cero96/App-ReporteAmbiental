@@ -1,3 +1,4 @@
+
 import User from "../models/users.js";
 import { db } from "../config/db.js";
 
@@ -71,5 +72,6 @@ export class UsersControllers {
 
   static deleteById = async (req, res) => {
     console.log("Desde Post /api/users");
+
   };
 }

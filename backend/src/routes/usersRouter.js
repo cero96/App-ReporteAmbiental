@@ -1,27 +1,25 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
-import { UsersControllers } from "../controllers/UsersController.js";
+import { UsersController } from "../controllers/UsersController.js";
 import User from "../models/users.js";
 
 const router = Router();
 
-router.get("/", UsersControllers.getAll);
-
+// Rutas para usuarios
+router.get("/", UsersController.getAll);
+router.get("/:id", UsersController.getById);
 router.post(
   "/",
-  body("name")
-    .notEmpty()
-    .withMessage("El username no puede ir vacío")
-    .toUpperCase(),
+  body("name").notEmpty().withMessage("El nombre no puede ir vacío").toUpperCase(),
   body("email")
     .notEmpty()
-    .withMessage("El email no puede ir vacío")
+    .withMessage("El correo no puede ir vacío")
     .isEmail()
-    .withMessage("El valor ingresado no es un email")
+    .withMessage("El correo ingresado no es válido")
     .toLowerCase()
     .custom(async (value) => {
-      const user = await User.findOne({ where: { email: value } }); // Usamos el modelo 'User'
+      const user = await User.findOne({ where: { email: value } });
       if (user) {
         throw new Error("El correo electrónico ya está registrado");
       }
@@ -31,11 +29,12 @@ router.post(
     .notEmpty()
     .withMessage("La contraseña no puede ir vacía")
     .isLength({ min: 8 })
-    .withMessage("La contraseña debe tener al menos 8 dígitos"),
-
+    .withMessage("La contraseña debe tener al menos 8 caracteres"),
   handleInputErrors,
-  UsersControllers.create
+  UsersController.create
 );
+router.put("/:id", UsersController.updateById);
+router.delete("/:id", UsersController.deleteById);
 
 router.get(
   "/:id",
