@@ -1,33 +1,17 @@
-import multer from 'multer';
-import path from 'path';
+import multer from "multer";
 
-// Configuración del almacenamiento de Multer
+// Configuración de multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Guardar archivos en la carpeta 'uploads' dentro de la carpeta 'backend'
-    cb(null, path.join(__dirname, '../uploads'));
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Asegúrate de que la carpeta "uploads" exista
   },
-  filename: (req, file, cb) => {
-    // Asignar un nombre único al archivo
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); // Conservar la extensión del archivo
-  }
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // Nombre único para el archivo
+  },
 });
 
-// Filtro para aceptar solo imágenes
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Solo se permiten archivos de imagen'), false);
-  }
-};
+// Crear el middleware de multer
+const upload = multer({ storage: storage });
 
-// Configuración de Multer
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limitar el tamaño del archivo a 5 MB
-  fileFilter: fileFilter
-});
-
+// Exportar el middleware
 export { upload };

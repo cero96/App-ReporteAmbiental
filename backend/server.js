@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { db } from "./src/config/db.js";
 import colors from "colors";
-import multer from "multer"; 
-import path from "path"; 
+import multer from "multer";
+import path from "path";
 import { fileURLToPath } from "url";
 import usersRouter from "./src/routes/usersRouter.js";
 import UserComparisonsRouter from "./src/routes/userComparisonsRouter.js";
@@ -20,7 +20,7 @@ import Comparisons from "./src/models/comparisons.js";
 import ConsumptionHistory from "./src/models/ConsumptionHistory.js";
 import User from "./src/models/users.js";
 import UserComparisons from "./src/models/usersComparisons.js";
-import { upload } from './src/middleware/uploadMiddleware.js'; // Asegúrate de que el upload sea el que has configurado
+import { upload } from "./src/middleware/uploadMiddleware.js";
 
 // Cargar variables de entorno
 dotenv.config();
@@ -35,7 +35,6 @@ app.use(express.json());
 
 // **Eliminar toda la parte de Mongoose y MongoDB**
 // Conexión a MongoDB (eliminada)
-
 
 // **Eliminar el esquema y modelo para comentarios**
 // const commentSchema = new mongoose.Schema({
@@ -70,7 +69,7 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "../frontend/public/assets"));
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + path.extname(file.originalname)); // Guardar con su extensión
   },
 });
@@ -95,9 +94,15 @@ app.post("/api/upload", upload.single("image"), (req, res) => {
 const connectToDb = async () => {
   try {
     await db.authenticate();
-    console.log(colors.blue.bold("Conexión a la base de datos PostgreSQL establecida con éxito."));
+    console.log(
+      colors.blue.bold(
+        "Conexión a la base de datos PostgreSQL establecida con éxito."
+      )
+    );
   } catch (error) {
-    console.error(colors.red.bold("Error al conectar a la base de datos PostgreSQL:", error));
+    console.error(
+      colors.red.bold("Error al conectar a la base de datos PostgreSQL:", error)
+    );
     process.exit(1);
   }
 };
