@@ -58,6 +58,7 @@ router.put(
   handleInputErrors,
   AppliancesController.updateById
 );
+
 router.delete(
   "/:id",
   param("id")
