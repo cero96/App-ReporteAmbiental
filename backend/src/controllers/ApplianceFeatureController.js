@@ -67,10 +67,34 @@ export class ApplianceFeatureController {
   };
 
   static updateById = async (req, res) => {
-    console.log("Desde Post /api/appliancefeature");
+    try {
+      const { id } = req.params;
+      const feature = await ApplianceFeature.findByPk(id);
+
+      if (!feature) {
+        return res.status(404).json({ error: "Caracteristica no encontrada" });
+      }
+      await feature.update(req.body);
+      res.json("Feature actualizado correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static deleteById = async (req, res) => {
-    console.log("Desde Post /api/appliancefeature");
+    try {
+      const { id } = req.params;
+      const feature = await ApplianceFeature.findByPk(id);
+
+      if (!feature) {
+        return res.status(404).json({ error: "Caracteristica no encontrada" });
+      }
+      await feature.destroy();
+      res.json("Feature eliminado correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 }

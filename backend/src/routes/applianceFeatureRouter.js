@@ -33,7 +33,37 @@ router.get(
   ApplianceFeatureController.getById
 );
 
-router.put("/:id", ApplianceFeatureController.updateById);
-router.delete("/:id", ApplianceFeatureController.deleteById);
+router.put(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  body("appliance_id")
+    .optional()
+    .notEmpty()
+    .withMessage("El campo appliance_id no puede ir vacío"),
+  body("feature_name")
+    .optional()
+    .notEmpty()
+    .withMessage("El campo feature_name no puede ir vacío"),
+  body("feature_value")
+    .optional()
+    .notEmpty()
+    .withMessage("El campo feature_value no puede ir vacío"),
+  handleInputErrors,
+  ApplianceFeatureController.updateById
+);
+router.delete(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  ApplianceFeatureController.deleteById
+);
 
 export default router;

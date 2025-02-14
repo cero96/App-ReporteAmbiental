@@ -48,7 +48,51 @@ router.get(
   UsersControllers.getById
 );
 
-router.put("/:id", UsersControllers.updateById);
-router.delete("/:id", UsersControllers.deleteById);
+router.put(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no válido")
+    .custom((value) => value > 0)
+    .withMessage("Id no válido"),
+
+  body("name")
+    .optional()
+    .notEmpty()
+    .withMessage("El username no puede ir vacío")
+    .toUpperCase(),
+
+  body("email")
+    .optional()
+    .isEmail()
+    .withMessage("El valor ingresado no es un email")
+    .toLowerCase()
+    .custom(async (value) => {
+      const user = await User.findOne({ where: { email: value } });
+      if (user) {
+        throw new Error("El correo electrónico ya está registrado");
+      }
+      return true;
+    }),
+
+  body("password")
+    .optional()
+    .isLength({ min: 8 })
+    .withMessage("La contraseña debe tener al menos 8 dígitos"),
+
+  handleInputErrors,
+  UsersControllers.updateById
+);
+
+router.delete(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  UsersControllers.deleteById
+);
 
 export default router;

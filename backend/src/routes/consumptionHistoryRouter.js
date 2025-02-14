@@ -31,7 +31,38 @@ router.get(
   handleInputErrors,
   ConsumptionHistoryController.getById
 );
-router.put("/:id", ConsumptionHistoryController.updateById);
-router.delete("/:id", ConsumptionHistoryController.deleteById);
+router.put(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  body("appliance_id")
+    .notEmpty()
+    .optional()
+    .withMessage("El campo appliance_id no puede ir vacío"),
+  body("date")
+    .optional()
+    .notEmpty()
+    .withMessage("El campo date no puede ir vacío"),
+  body("consumption_KWH")
+    .notEmpty()
+    .optional()
+    .withMessage("El campo consumption_KWH no puede ir vacío"),
+  body("CO2_KG").notEmpty().withMessage("El campo CO2_KG no puede ir vacío"),
+  handleInputErrors,
+  ConsumptionHistoryController.updateById
+);
+router.delete(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  ConsumptionHistoryController.deleteById
+);
 
 export default router;
