@@ -12,6 +12,7 @@ import ApplianceForm from "./components/ApplianceForm";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import CoverParticles from "./components/CoverParticles";
 import Header from "./components/header";
+import CarbonFootprintCalculator from "./components/CarbonFootprintCalculator";
 
 function App() {
   return (
@@ -65,6 +66,18 @@ function App() {
               <>
                 <Navbar />
                 <ApplianceDashboard />
+                <Footer />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/calculadora"
+          element={
+            <PrivateRoute>
+              <>
+                <Navbar />
+                <CarbonFootprintCalculator />
                 <Footer />
               </>
             </PrivateRoute>
