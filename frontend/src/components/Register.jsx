@@ -4,6 +4,7 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +16,7 @@ const Register = () => {
     setIsSubmitting(true);
 
     // Validaciones del formulario
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !confirmPassword) {
       setErrorMessage('Por favor, complete todos los campos');
       setIsSubmitting(false);
       return;
@@ -30,6 +31,12 @@ const Register = () => {
 
     if (password.length < 6) {
       setErrorMessage('La contraseña debe tener al menos 6 caracteres');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden');
       setIsSubmitting(false);
       return;
     }
@@ -65,7 +72,8 @@ const Register = () => {
 
   useEffect(() => {
     setErrorMessage('');
-  }, [username, email, password]);
+    setSuccessMessage('');
+  }, [username, email, password, confirmPassword]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -105,6 +113,18 @@ const Register = () => {
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="confirmPassword" className="form-label">Confirmar Contraseña</label>
+            <input
+              type="password"
+              className="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>

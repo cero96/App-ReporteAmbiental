@@ -1,83 +1,86 @@
-import React, { useState, useEffect } from 'react';
+// src/components/Login.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!email || !password) {
-      setErrorMessage('Por favor, complete todos los campos');
-      return;
-    }
+    setErrorMessage("");
 
     const data = { email, password };
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Error desconocido");
+      }
+
       const result = await response.json();
 
-      if (response.ok) {
-        setErrorMessage('');
-        localStorage.setItem('token', result.token); // Guarda el token JWT
-        alert('Login exitoso!');
-        window.location.href = '/'; // Redirige a la página principal
+      if (result.token) {
+        localStorage.setItem("token", result.token); // Guardar el token en el localStorage
+        alert("¡Inicio de sesión exitoso!");
+        navigate("/home"); // Redirección después de login
       } else {
-        throw new Error(result.error || 'Error desconocido');
+        throw new Error("Token no recibido. Por favor, inténtalo de nuevo.");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error.message || "Ocurrió un error.");
     }
   };
 
-  useEffect(() => {
-    setErrorMessage('');
-  }, [email, password]);
-
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
-        <h2 className="text-center mb-4 text-success">Iniciar Sesión</h2>
-        <form id="loginForm" onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Correo electrónico</label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-header bg-primary text-white text-center">
+              <h4>Iniciar sesión</h4>
+            </div>
+            <div className="card-body">
+              {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Correo electrónico</label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="form-control"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Contraseña</label>
+                  <input
+                    type="password"
+                    id="password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary w-100">Iniciar sesión</button>
+              </form>
+            </div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-success w-100">Ingresar</button>
-          {errorMessage && (
-            <p id="error-message" className="text-danger mt-3">{errorMessage}</p>
-          )}
-        </form>
+        </div>
       </div>
     </div>
   );

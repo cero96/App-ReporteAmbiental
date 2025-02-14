@@ -1,100 +1,82 @@
-
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import User from "../models/users.js";
 import { db } from "../config/db.js";
 
-export class UsersControllers {
-  static getAll = async (req, res) => {
-    try {
-      const users = await User.findAll({
-        order: [["id", "ASC"]],
-        //TODO: Filtrar por el usuario autenticado
-      });
+const secretKey = "your_secret_key"; // Usa una clave secreta más segura.
 
-      res.json(users);
+export class UsersController {
+  static login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) return res.status(401).json({ error: "Contraseña incorrecta" });
+
+      const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: "1h" });
+      res.json({ message: "Inicio de sesión exitoso", token });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: error.message });
     }
   };
 
   static create = async (req, res) => {
+    const { name, email, password } = req.body;
     const transaction = await db.transaction();
-
     try {
-      const lastUser = await User.findOne({
-        order: [["id", "DESC"]],
-      });
-
-      const newUserId = lastUser ? lastUser.id + 1 : 1;
-      const user = await User.create(
-        { ...req.body, id: newUserId },
-        { transaction }
-      );
-
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = await User.create({ name, email, password: hashedPassword }, { transaction });
       await transaction.commit();
-
-      const responseData = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      };
-
-      res
-        .status(201)
-        .json({ message: "Usuario creado correctamente", user: responseData });
+      res.status(201).json({ message: "Usuario registrado correctamente", user: { id: newUser.id, name, email } });
     } catch (error) {
       await transaction.rollback();
+      res.status(500).json({ error: error.message });
+    }
+  };
 
-      console.log(error);
+  static getAll = async (req, res) => {
+    try {
+      const users = await User.findAll();
+      res.json(users);
+    } catch (error) {
       res.status(500).json({ error: error.message });
     }
   };
 
   static getById = async (req, res) => {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
-
-      if (!user) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
       res.json(user);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: error.message });
     }
   };
 
   static updateById = async (req, res) => {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
+      const { name, email, password } = req.body;
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
-      if (!user) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
-
-      await user.update(req.body);
-      res.json("Usuario actualizado correctamente");
+      const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
+      await user.update({ name, email, password: hashedPassword });
+      res.json({ message: "Usuario actualizado correctamente", user });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: error.message });
     }
   };
 
   static deleteById = async (req, res) => {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
-      if (!user) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
       await user.destroy();
-      res.json("Usuario eliminado correctamente");
+      res.json({ message: "Usuario eliminado correctamente" });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: error.message });
     }
   };

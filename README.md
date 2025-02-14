@@ -30,65 +30,64 @@ npm install react-chartjs-2 chart.js
 
 
 script creacion de tablas 
-
-
-CREATE TABLE "users" (
+ CREATE TABLE "users" (
   "id" serial PRIMARY KEY,
-  "name" varchar(255),
-  "email" varchar(255) UNIQUE,
-  "password" varchar(255),
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "name" varchar(255) NOT NULL,
+  "email" varchar(255) UNIQUE NOT NULL,
+  "password" varchar(255) NOT NULL,
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "appliances" (
   "id" serial PRIMARY KEY,
-  "user_id" integer,
-  "name" varchar(255),
+  "user_id" integer NOT NULL,
+  "name" varchar(255) NOT NULL,
   "brand" varchar(255),
   "model" varchar(255),
   "type" varchar(255),
   "energy_rating" varchar(255),
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user_appliances FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE "appliance_features" (
   "id" serial PRIMARY KEY,
-  "appliance_id" integer,
-  "feature_name" varchar(255),
+  "appliance_id" integer NOT NULL,
+  "feature_name" varchar(255) NOT NULL,
   "feature_value" varchar(255),
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_appliance_features FOREIGN KEY ("appliance_id") REFERENCES "appliances" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE "comparisons" (
   "id" serial PRIMARY KEY,
-  "name" varchar(255),
+  "name" varchar(255) NOT NULL,
   "description" text,
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "users_comparisons" (
   "id" serial PRIMARY KEY,
-  "user_id" integer,
-  "comparison_id" integer,
+  "user_id" integer NOT NULL,
+  "comparison_id" integer NOT NULL,
   "comparison_result" jsonb,
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_users_comparisons_user FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_users_comparisons_comparison FOREIGN KEY ("comparison_id") REFERENCES "comparisons" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE "consumption_history" (
   "id" serial PRIMARY KEY,
-  "appliance_id" integer,
-  "date" timestamp,
+  "appliance_id" integer NOT NULL,
+  "date" timestamp NOT NULL,
   "consumption_kwh" decimal(10,2),
   "carbon_footprint_kg" decimal(10,2),
-  "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+  "createdAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_consumption_history FOREIGN KEY ("appliance_id") REFERENCES "appliances" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-ALTER TABLE "appliances" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
-ALTER TABLE "appliance_features" ADD FOREIGN KEY ("appliance_id") REFERENCES "appliances" ("id");
-
-ALTER TABLE "user_comparisons" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
-ALTER TABLE "user_comparisons" ADD FOREIGN KEY ("comparison_id") REFERENCES "comparisons" ("id");
-
-ALTER TABLE "consumption_history" ADD FOREIGN KEY ("appliance_id") REFERENCES "appliances" ("id");
