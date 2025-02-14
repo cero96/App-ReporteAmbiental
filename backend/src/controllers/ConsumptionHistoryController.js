@@ -53,9 +53,19 @@ export class ConsumptionHistoryController {
   };
 
   static getById = async (req, res) => {
-    console.log("Desde Post /api/consumptionhistory");
-  };
+    try {
+      const { id } = req.params;
+      const consumption = await ConsumptionHistory.findByPk(id);
 
+      if (!consumption) {
+        return res.status(404).json({ error: "Consumo no encontrada" });
+      }
+      res.json(consumption);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
+  };
   static updateById = async (req, res) => {
     console.log("Desde Post /api/consumptionhistory");
   };

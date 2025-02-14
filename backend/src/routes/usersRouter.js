@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
 import { UsersControllers } from "../controllers/UsersController.js";
 import User from "../models/users.js";
@@ -37,7 +37,17 @@ router.post(
   UsersControllers.create
 );
 
-router.get("/:id", UsersControllers.getById);
+router.get(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  UsersControllers.getById
+);
+
 router.put("/:id", UsersControllers.updateById);
 router.delete("/:id", UsersControllers.deleteById);
 

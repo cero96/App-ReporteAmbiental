@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validations.js";
 import { ConsumptionHistoryController } from "../controllers/ConsumptionHistoryController.js";
 
@@ -21,7 +21,16 @@ router.post(
   ConsumptionHistoryController.create
 );
 
-router.get("/:id", ConsumptionHistoryController.getById);
+router.get(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  ConsumptionHistoryController.getById
+);
 router.put("/:id", ConsumptionHistoryController.updateById);
 router.delete("/:id", ConsumptionHistoryController.deleteById);
 
