@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Row, Spinner } from "react-bootstrap";
 
+
 const ApplianceDashboard = () => {
   const [appliances, setAppliances] = useState([]);
   const [loading, setLoading] = useState(true);
