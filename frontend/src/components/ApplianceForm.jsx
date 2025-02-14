@@ -1,147 +1,155 @@
-import React, { useState } from "react";
-import ApplianceService from "../services/ApplianceService";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
-const ApplianceForm = ({ onApplianceCreated }) => {
-  const [appliance, setAppliance] = useState({
-    name: "", // Ubicación
+const ApplianceForm = () => {
+  const [form, setForm] = useState({
+    name: "",
     brand: "",
     model: "",
-    type: "", // Cambiado a texto
-    energy_rating: [],
-    image: null,
+    type: "",
+    energy_rating: "",
   });
+  const [image, setImage] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const editingAppliance = location.state;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (e.target.type === "checkbox") {
-      setAppliance((prev) => ({
-        ...prev,
-        [name]: prev[name].includes(value)
-          ? prev[name].filter((item) => item !== value)
-          : [...prev[name], value],
-      }));
-    } else {
-      setAppliance((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+  useEffect(() => {
+    if (editingAppliance) {
+      setForm(editingAppliance);
     }
+  }, [editingAppliance]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
-  const handleImageChange = (e) => {
-    setAppliance((prev) => ({
-      ...prev,
-      image: e.target.files[0],
-    }));
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    Object.keys(appliance).forEach((key) => {
-      formData.append(key, appliance[key]);
-    });
+    const token = localStorage.getItem("token");
+    const data = new FormData();
+
+    data.append("name", form.name);
+    data.append("brand", form.brand);
+    data.append("model", form.model);
+    data.append("type", form.type);
+    data.append("energy_rating", form.energy_rating);
+    if (image) data.append("image", image);
+
+    const method = editingAppliance ? "PUT" : "POST";
+    const url = editingAppliance
+      ? `http://localhost:5000/api/appliances/${form.appliance_id}`
+      : "http://localhost:5000/api/appliances";
 
     try {
-      await ApplianceService.createAppliance(formData);
-      onApplianceCreated();
-      setAppliance({
-        name: "",
-        brand: "",
-        model: "",
-        type: "", // Reset to empty
-        energy_rating: [],
-        image: null,
+      const response = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
       });
-    } catch (error) {
-      console.error("Error al crear el electrodoméstico:", error);
+
+      // Si la respuesta no es OK, lanza un error con el mensaje de la respuesta
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error desconocido");
+      }
+
+      navigate("/"); // Redirigir a la página principal después de guardar
+    } catch (err) {
+      console.error(err);
+      alert(`Hubo un error al guardar el electrodoméstico: ${err.message}`);
     }
   };
 
   return (
-    <div className="container p-4">
-      <div className="card p-4 shadow-sm mb-4">
-        <h3 className="card-title text-center mb-4">Agregar Electrodoméstico</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Ubicación</label>
-            <input
-              type="text"
-              name="name"
-              value={appliance.name}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Ej. Cocina, Sala, etc."
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Marca</label>
-            <input
-              type="text"
-              name="brand"
-              value={appliance.brand}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Modelo</label>
-            <input
-              type="text"
-              name="model"
-              value={appliance.model}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Tipo de Electrodoméstico</label>
-            <input
-              type="text"
-              name="type"
-              value={appliance.type}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Ej. Refrigeradora, Lavadora, etc."
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Rango Energético</label>
-            <select
-              multiple
-              name="energy_rating"
-              value={appliance.energy_rating}
-              onChange={handleChange}
-              className="form-control"
-            >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="E">E</option>
-            </select>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Imagen</label>
-            <input
-              type="file"
-              name="image"
-              onChange={handleImageChange}
-              className="form-control"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100">
-            Crear Electrodoméstico
-          </button>
-        </form>
-      </div>
-    </div>
+    <Container>
+      <h1 className="my-4">{editingAppliance ? "Actualizar" : "Crear"} Electrodoméstico</h1>
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Marca</Form.Label>
+              <Form.Control
+                type="text"
+                name="brand"
+                value={form.brand}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Modelo</Form.Label>
+              <Form.Control
+                type="text"
+                name="model"
+                value={form.model}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Tipo</Form.Label>
+              <Form.Control
+                type="text"
+                name="type"
+                value={form.type}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Calificación Energética</Form.Label>
+              <Form.Control
+                type="text"
+                name="energy_rating"
+                value={form.energy_rating}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Imagen</Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Button type="submit" variant="primary" className="mt-3">
+          {editingAppliance ? "Actualizar" : "Crear"}
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
