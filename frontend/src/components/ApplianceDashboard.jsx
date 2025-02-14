@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ApplianceService from "../services/ApplianceService";
+import axios from "axios";
 import ApplianceForm from "./ApplianceForm";
 
 const ApplianceDashboard = () => {
@@ -7,7 +7,11 @@ const ApplianceDashboard = () => {
 
   const fetchAppliances = async () => {
     try {
-      const response = await ApplianceService.getAllAppliances();
+      const response = await axios.get("/api/appliances", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Enviar token de autenticación
+        },
+      });
       setAppliances(response.data);
     } catch (error) {
       console.error("Error al cargar los electrodomésticos:", error);
@@ -20,8 +24,12 @@ const ApplianceDashboard = () => {
 
   const handleDelete = async (id) => {
     try {
-      await ApplianceService.deleteAppliance(id);
-      fetchAppliances(); // Actualiza la lista después de eliminar
+      await axios.delete(`/api/appliances/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      fetchAppliances(); // Actualizar la lista después de eliminar
     } catch (error) {
       console.error("Error al eliminar el electrodoméstico:", error);
     }

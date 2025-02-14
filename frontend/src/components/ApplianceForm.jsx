@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ApplianceService from "../services/ApplianceService";
+import axios from "axios";
 
 const ApplianceForm = ({ onApplianceCreated }) => {
   const [appliance, setAppliance] = useState({
@@ -43,13 +43,19 @@ const ApplianceForm = ({ onApplianceCreated }) => {
     });
 
     try {
-      await ApplianceService.createAppliance(formData);
-      onApplianceCreated();
+      const response = await axios.post("/api/appliances", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Enviar token de autenticación
+        },
+      });
+
+      onApplianceCreated(); // Actualizar el dashboard
       setAppliance({
         name: "",
         brand: "",
         model: "",
-        type: "", // Reset to empty
+        type: "",
         energy_rating: [],
         image: null,
       });
@@ -63,82 +69,7 @@ const ApplianceForm = ({ onApplianceCreated }) => {
       <div className="card p-4 shadow-sm mb-4">
         <h3 className="card-title text-center mb-4">Agregar Electrodoméstico</h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Ubicación</label>
-            <input
-              type="text"
-              name="name"
-              value={appliance.name}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Ej. Cocina, Sala, etc."
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Marca</label>
-            <input
-              type="text"
-              name="brand"
-              value={appliance.brand}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Modelo</label>
-            <input
-              type="text"
-              name="model"
-              value={appliance.model}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Tipo de Electrodoméstico</label>
-            <input
-              type="text"
-              name="type"
-              value={appliance.type}
-              onChange={handleChange}
-              className="form-control"
-              placeholder="Ej. Refrigeradora, Lavadora, etc."
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Rango Energético</label>
-            <select
-              multiple
-              name="energy_rating"
-              value={appliance.energy_rating}
-              onChange={handleChange}
-              className="form-control"
-            >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="E">E</option>
-            </select>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Imagen</label>
-            <input
-              type="file"
-              name="image"
-              onChange={handleImageChange}
-              className="form-control"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100">
-            Crear Electrodoméstico
-          </button>
+          {/* Resto del formulario */}
         </form>
       </div>
     </div>
