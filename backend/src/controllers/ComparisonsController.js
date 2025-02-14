@@ -3,7 +3,17 @@ import { db } from "../config/db.js";
 
 export class ComparisonsControllers {
   static getAll = async (req, res) => {
-    console.log("Desde /api/comparisons");
+    try {
+      const comparisons = await Comparisons.findAll({
+        order: [["id_comparison", "ASC"]],
+        //TODO: Filtrar por el usuario autenticado
+      });
+
+      res.json(comparisons);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static create = async (req, res) => {

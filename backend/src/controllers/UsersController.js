@@ -3,7 +3,17 @@ import { db } from "../config/db.js";
 
 export class UsersControllers {
   static getAll = async (req, res) => {
-    console.log("Desde /api/users");
+    try {
+      const users = await User.findAll({
+        order: [["id", "ASC"]],
+        //TODO: Filtrar por el usuario autenticado
+      });
+
+      res.json(users);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static create = async (req, res) => {
