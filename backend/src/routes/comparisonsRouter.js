@@ -28,7 +28,30 @@ router.get(
   ComparisonsControllers.getById
 );
 
-router.put("/:id", ComparisonsControllers.updateById);
-router.delete("/:id", ComparisonsControllers.deleteById);
+router.put(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  body("name").optional().notEmpty().withMessage("El name no puede ir vacío"),
+  body("description")
+    .notEmpty()
+    .optional()
+    .withMessage("El description no puede ir vacío"),
+  handleInputErrors,
+  ComparisonsControllers.updateById
+);
+router.delete(
+  "/:id",
+  param("id")
+    .isInt()
+    .withMessage("Id no valido")
+    .custom((value) => value > 0)
+    .withMessage("Id no valido"),
+  handleInputErrors,
+  ComparisonsControllers.deleteById
+);
 
 export default router;

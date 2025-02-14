@@ -67,10 +67,34 @@ export class ConsumptionHistoryController {
     }
   };
   static updateById = async (req, res) => {
-    console.log("Desde Post /api/consumptionhistory");
+    try {
+      const { id } = req.params;
+      const consumption = await ConsumptionHistory.findByPk(id);
+
+      if (!consumption) {
+        return res.status(404).json({ error: "Consumo no encontrada" });
+      }
+      await consumption.update(req.body);
+      res.json("Consumo actualizado correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static deleteById = async (req, res) => {
-    console.log("Desde Post /api/consumptionhistory");
+    try {
+      const { id } = req.params;
+      const consumption = await ConsumptionHistory.findByPk(id);
+
+      if (!consumption) {
+        return res.status(404).json({ error: "Consumo no encontrada" });
+      }
+      await consumption.destroy();
+      res.json("Consumo eliminado correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 }

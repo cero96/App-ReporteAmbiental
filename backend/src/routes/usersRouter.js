@@ -8,10 +8,12 @@ const router = Router();
 router.post("/login", UsersController.login);
 router.post("/", UsersController.create);
 
+
 // Rutas protegidas
 router.get("/", authenticateToken, UsersController.getAll);
 router.get("/:id", authenticateToken, UsersController.getById);
 router.put("/:id", authenticateToken, UsersController.updateById);
 router.delete("/:id", authenticateToken, UsersController.deleteById);
+
 
 export default router;
