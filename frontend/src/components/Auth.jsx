@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Login from './Login';  // Asegúrate de que esto apunta al componente Login correctamente
 import Register from './Register';  // Asegúrate de que esto apunta al componente Register correctamente
-import GoogleLogin from './GoogleLogin'; // Este es el componente de login con Google
 
 const Auth = () => {
   return (

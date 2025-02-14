@@ -1,28 +1,23 @@
-import React, { useState } from 'react';
-import GoogleLogin from './GoogleLogin'; // Importar el componente GoogleLogin
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
-  // Estado para almacenar los valores del formulario y el mensaje de error
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevenir el comportamiento por defecto (recarga de página)
+    event.preventDefault();
 
-    // Validar si los campos están vacíos
     if (!email || !password) {
       setErrorMessage('Por favor, complete todos los campos');
       return;
     }
 
-    // Configurar los datos a enviar al backend
     const data = { email, password };
 
     try {
-      // Hacer la solicitud POST al backend
-      const response = await fetch('http://localhost:5000/api/users', {  // Cambié la ruta aquí
+      const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,36 +25,29 @@ const Login = () => {
         body: JSON.stringify(data),
       });
 
-      const textResponse = await response.text(); // Leer la respuesta como texto
-      console.log(textResponse); // Ver la respuesta cruda
+      const result = await response.json();
 
-      let result;
-      try {
-        result = JSON.parse(textResponse); // Intentar convertir la respuesta a JSON
-      } catch (error) {
-        throw new Error('La respuesta no es un JSON válido');
-      }
-
-      // Si el login es exitoso
       if (response.ok) {
-        setErrorMessage(''); // Limpiar el mensaje de error
-        localStorage.setItem('token', result.token); // Guardar el token en localStorage
-        alert('Login exitoso!'); // Notificar al usuario
-
-        // Redirigir al usuario a la página principal
+        setErrorMessage('');
+        localStorage.setItem('token', result.token); // Guarda el token JWT
+        alert('Login exitoso!');
         window.location.href = '/'; // Redirige a la página principal
       } else {
         throw new Error(result.error || 'Error desconocido');
       }
     } catch (error) {
-      setErrorMessage(error.message); // Mostrar el mensaje de error
+      setErrorMessage(error.message);
     }
   };
 
+  useEffect(() => {
+    setErrorMessage('');
+  }, [email, password]);
+
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card p-4" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 className="text-center mb-4">Iniciar sesión</h2>
+      <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+        <h2 className="text-center mb-4 text-success">Iniciar Sesión</h2>
         <form id="loginForm" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">Correo electrónico</label>
@@ -69,7 +57,7 @@ const Login = () => {
               id="email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Actualiza el estado de email
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -81,16 +69,15 @@ const Login = () => {
               id="password"
               name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Actualiza el estado de password
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button type="submit" className="btn btn-success w-100">Iniciar sesión</button>
-          <GoogleLogin /> 
+          <button type="submit" className="btn btn-success w-100">Ingresar</button>
           {errorMessage && (
             <p id="error-message" className="text-danger mt-3">{errorMessage}</p>
           )}
-        </form>      
+        </form>
       </div>
     </div>
   );
