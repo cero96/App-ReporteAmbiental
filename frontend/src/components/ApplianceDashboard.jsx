@@ -43,7 +43,7 @@ const ApplianceDashboard = () => {
   };
 
   const handleEdit = (appliance) => {
-    navigate("/create", { state: appliance });
+    navigate("/Form", { state: appliance });
   };
 
   const handleDelete = async (id) => {
