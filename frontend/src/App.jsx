@@ -1,22 +1,44 @@
-import React from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Contacto from './components/Contacto';
-import Auth from './components/Auth';
-import Footer from './components/Footer';
-import PrivateRoute from './components/PrivateRoute';
-import ApplianceDashboard from './components/ApplianceDashboard';  // Importar el nuevo componente
-import ApplianceForm from './components/ApplianceForm'; 
+import React from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Auth from "./components/Auth";
+import Footer from "./components/Footer";
+import PrivateRoute from "./components/PrivateRoute";
+import ApplianceDashboard from "./components/ApplianceDashboard";
+import ApplianceForm from "./components/ApplianceForm";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import CoverParticles from "./components/CoverParticles";
+
 function App() {
   return (
     <Router>
       <Routes>
         {/* Rutas públicas */}
-        <Route path="/" element={<Auth />} />
-        
+        <Route
+          path="/"
+          element={
+            <>
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  zIndex: 0,
+                  pointerEvents: "none",
+                }}
+              >
+                <CoverParticles />
+              </div>
+              <Auth />
+            </>
+          }
+        />
+
         {/* Rutas protegidas */}
         <Route
           path="/home"
@@ -30,20 +52,9 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route
-          path="/contacto"
-          element={
-            <PrivateRoute>
-              <>
-                <Navbar />
-                <Contacto />
-                <Footer />
-              </>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/dashboard"  // Nueva ruta protegida
+          path="/dashboard"
           element={
             <PrivateRoute>
               <>
@@ -54,8 +65,9 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route
-          path="/form"  // Nueva ruta protegida
+          path="/form"
           element={
             <PrivateRoute>
               <>

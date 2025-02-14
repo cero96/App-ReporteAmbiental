@@ -23,7 +23,7 @@ UserComparisons.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Comparisons",
+        model: "comparisons",
         key: "id_comparison",
       },
       onDelete: "Cascade",

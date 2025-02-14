@@ -1,7 +1,7 @@
 // src/components/Login.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ const Login = () => {
     const data = { email, password };
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
+      const response = await fetch("http://localhost:5001/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,9 +32,9 @@ const Login = () => {
       const result = await response.json();
 
       if (result.token) {
-        localStorage.setItem("token", result.token); // Guardar el token en el localStorage
+        localStorage.setItem("token", result.token);
         alert("¡Inicio de sesión exitoso!");
-        navigate("/home"); // Redirección después de login
+        navigate("/home");
       } else {
         throw new Error("Token no recibido. Por favor, inténtalo de nuevo.");
       }
@@ -44,43 +44,81 @@ const Login = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-header bg-primary text-white text-center">
-              <h4>Iniciar sesión</h4>
+    <div className="tab-content">
+      <div className="tab-pane fade show active">
+        <form onSubmit={handleSubmit}>
+          <div className="text-center mb-3">
+            <p>Sign in with:</p>
+            <button type="button" className="btn btn-link btn-floating mx-1">
+              <i className="fab fa-facebook-f"></i>
+            </button>
+            <button type="button" className="btn btn-link btn-floating mx-1">
+              <i className="fab fa-google"></i>
+            </button>
+            <button type="button" className="btn btn-link btn-floating mx-1">
+              <i className="fab fa-twitter"></i>
+            </button>
+            <button type="button" className="btn btn-link btn-floating mx-1">
+              <i className="fab fa-github"></i>
+            </button>
+          </div>
+
+          <p className="text-center">or:</p>
+
+          <div className="mb-4">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Email or username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="row mb-4">
+            <div className="col-md-6 d-flex justify-content-center">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="loginCheck"
+                defaultChecked
+              />
+              <label className="form-check-label ms-2" htmlFor="loginCheck">
+                {" "}
+                Remember me{" "}
+              </label>
             </div>
-            <div className="card-body">
-              {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Correo electrónico</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Contraseña</label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary w-100">Iniciar sesión</button>
-              </form>
+            <div className="col-md-6 d-flex justify-content-center">
+              <a href="#!">Forgot password?</a>
             </div>
           </div>
-        </div>
+
+          {errorMessage && (
+            <div className="alert alert-danger">{errorMessage}</div>
+          )}
+
+          <button type="submit" className="btn btn-primary btn-block mb-4">
+            Sign in
+          </button>
+
+          <div className="text-center">
+            <p>
+              Not a member? <a href="#!">Register</a>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
