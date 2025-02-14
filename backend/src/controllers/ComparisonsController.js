@@ -68,10 +68,34 @@ export class ComparisonsControllers {
   };
 
   static updateById = async (req, res) => {
-    console.log("Desde Post /api/comparisons");
+    try {
+      const { id } = req.params;
+      const comparisons = await Comparisons.findByPk(id);
+
+      if (!comparisons) {
+        return res.status(404).json({ error: "Comparacion no encontrada" });
+      }
+      await comparisons.update(req.body);
+      res.json("Comparacion actualizada correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static deleteById = async (req, res) => {
-    console.log("Desde Post /api/comparisons");
+    try {
+      const { id } = req.params;
+      const comparisons = await Comparisons.findByPk(id);
+
+      if (!comparisons) {
+        return res.status(404).json({ error: "Comparacion no encontrada" });
+      }
+      await comparisons.destroy();
+      res.json("Comparacion eliminada correctamente");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 }
