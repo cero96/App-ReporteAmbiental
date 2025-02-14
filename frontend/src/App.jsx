@@ -8,7 +8,8 @@ import Contacto from './components/Contacto';
 import Auth from './components/Auth';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
-
+import ApplianceDashboard from './components/ApplianceDashboard';  // Importar el nuevo componente
+import ApplianceForm from './components/ApplianceForm'; 
 function App() {
   return (
     <Router>
@@ -36,6 +37,30 @@ function App() {
               <>
                 <Navbar />
                 <Contacto />
+                <Footer />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard"  // Nueva ruta protegida
+          element={
+            <PrivateRoute>
+              <>
+                <Navbar />
+                <ApplianceDashboard />
+                <Footer />
+              </>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/form"  // Nueva ruta protegida
+          element={
+            <PrivateRoute>
+              <>
+                <Navbar />
+                <ApplianceForm />
                 <Footer />
               </>
             </PrivateRoute>
