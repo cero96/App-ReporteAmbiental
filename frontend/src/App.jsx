@@ -11,6 +11,7 @@ import ApplianceDashboard from "./components/ApplianceDashboard";
 import ApplianceForm from "./components/ApplianceForm";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import CoverParticles from "./components/CoverParticles";
+import Header from "./components/header";
 
 function App() {
   return (
@@ -34,7 +35,11 @@ function App() {
               >
                 <CoverParticles />
               </div>
-              <Auth />
+              <Header />
+
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <Auth />
+              </div>
             </>
           }
         />
