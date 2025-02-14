@@ -3,7 +3,17 @@ import { db } from "../config/db.js";
 
 export class ConsumptionHistoryController {
   static getAll = async (req, res) => {
-    console.log("Desde /api/consumptionhistory");
+    try {
+      const consumption = await ConsumptionHistory.findAll({
+        order: [["id_consumption", "ASC"]],
+        //TODO: Filtrar por el usuario autenticado
+      });
+
+      res.json(consumption);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
   };
 
   static create = async (req, res) => {
